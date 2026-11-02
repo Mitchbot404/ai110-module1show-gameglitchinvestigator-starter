@@ -31,8 +31,6 @@ st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
-# FIXME (resolved): The Higher/Lower hints originally pointed in the wrong direction.
-# FIX: Higher guesses now say "Go LOWER" and lower guesses say "Go HIGHER".
 if "attempts" not in st.session_state:
     st.session_state.attempts = 0
 
@@ -46,8 +44,8 @@ if "history" not in st.session_state:
     st.session_state.history = []
 
 # FIXME (resolved): Changing difficulty previously kept the old secret number.
-# FIX: Generate a new secret and reset the game state when difficulty changes.
-# A difficulty change begins a new game within the selected range.
+# FIX: With ChatGPT's help, track the selected difficulty and reset
+# the secret, attempts, and status when the difficulty changes.
 if "active_difficulty" not in st.session_state:
     st.session_state.active_difficulty = difficulty
 elif st.session_state.active_difficulty != difficulty:

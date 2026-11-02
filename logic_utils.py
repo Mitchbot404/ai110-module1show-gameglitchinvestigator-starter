@@ -32,6 +32,9 @@ def parse_guess(raw: str):
     return True, value, None
 
 
+# FIXME (resolved): The original Higher/Lower hints were reversed.
+# FIX: Used ChatGPT to review the comparisons, corrected the
+# messages, and verified the results with pytest.
 def check_guess(guess, secret):
     """
     Compare numeric guess to numeric secret and return (outcome, message).
