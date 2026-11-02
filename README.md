@@ -12,7 +12,7 @@ It wrote the code, ran away, and now the game is unplayable.
 ## 🛠️ Setup
 
 1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
+2. Run the repaired app: `python -m streamlit run app.py`
 
 ## 🕵️‍♂️ Your Mission
 
@@ -25,41 +25,54 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
+- [x] Describe the game's purpose.
 The player tries to guess a randomly generated secret number within a limited number of attempts. The selected difficulty determines the allowed number range and attempt limit. The game provides higher/lower hints and tracks a score.
-- [ ] Detail which bugs you found.
+- [x] Detail which bugs you found.
 The original hints were reversed. New Game initially ignored the selected difficulty range, and the instructions showed a hardcoded range. Changing difficulty could leave an old secret active. After winning or losing, New Game could leave the game stuck in the previous end state. Attempts initially started at 1 instead of 0, and the attempts-left display lagged behind submitted guesses. The game also accepted guesses outside the selected difficulty range.
-- [ ] Explain what fixes you applied.
+- [x] Explain what fixes you applied.
 Corrected check_guess() hint messages, used the selected low and high values when generating and displaying the active range, synchronized the secret with difficulty changes, reset status to "playing" on New Game, initialized attempts at 0, refreshed the on-screen attempt count after submissions, and rejected out-of-range guesses without reducing the remaining attempts. The secret is preserved in st.session_state across ordinary reruns.
 
 ## 📸 Demo Walkthrough
 
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
+1. Start the application using `python -m streamlit run app.py` and select Easy mode, which allows 6 attempts to guess a number between 1 and 20.
+2. Open Developer Debug Info to view the secret number. For this example, assume the secret is 15.
+3. Enter 10 and click Submit Guess. The game displays "📈 Go HIGHER!" and reduces the remaining attempts to 5.
+4. Enter 18. The game displays "📉 Go LOWER!" and reduces the remaining attempts to 4.
+5. Enter 15. The game displays "🎉 Correct!" and announces the win.
+6. Start a new game using New Game. The game generates another secret, resets the attempts, and allows the player to continue.
+7. Switch to Normal or Hard mode to confirm that the game adjusts its range and attempt limit.
 
-1. Start the app with python -m streamlit run app.py and choose Easy, Normal, or Hard from the sidebar.
-2. Check that the range and attempt limit match the difficulty: Easy is 1–20 with 6 attempts, Normal is 1–100 with 8 attempts, and Hard is 1–50 with 5 attempts.
-3. Open Developer Debug Info to view the secret number and confirm which value the game expects.
-4. Enter a number within the selected range and click Submit Guess 🚀. If the guess is too high, the game says 📉 Go LOWER!; if it is too low, the game says 📈 Go HIGHER!.
-5. Confirm that each valid, incorrect guess reduces the remaining attempts by one. Try an out-of-range number to verify that an error appears and no attempt is lost.
-6. Enter the secret number from Developer Debug Info to see the 🎉 Correct! message and winning result.
-7. Click New Game 🔁 after winning or losing to confirm a new secret is generated and the game is playable again. Change difficulty to confirm the new game uses the newly selected range.
 
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
+
 
 ## 🧪 Test Results
 
-```
-#python -m pytest tests/ -v
+```text
+============================== test session starts ============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\mitch\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\mitch\OneDrive\Documents\ChatGPT\School\Game Glitch Investigator\ai110-module1show-gameglitchinvestigator-starter
+plugins: anyio-4.16.0
+collected 14 items                                                                     
 
-collected 14 items
+tests/test_app_gameplay.py::test_out_of_range_guess_does_not_use_attempt[Easy-65] PASSED [  7%]
+tests/test_app_gameplay.py::test_out_of_range_guess_does_not_use_attempt[Normal-124] PASSED [ 14%]
+tests/test_app_gameplay.py::test_out_of_range_guess_does_not_use_attempt[Hard-0] PASSED [ 21%]
+tests/test_app_gameplay.py::test_valid_guesses_count_from_zero_and_end_on_last_attempt[Easy] PASSED [ 28%]
+tests/test_app_gameplay.py::test_valid_guesses_count_from_zero_and_end_on_last_attempt[Normal] PASSED [ 35%]
+tests/test_app_gameplay.py::test_valid_guesses_count_from_zero_and_end_on_last_attempt[Hard] PASSED [ 42%]
+tests/test_app_gameplay.py::test_new_game_resets_status_and_is_playable[won] PASSED [ 50%]
+tests/test_app_gameplay.py::test_new_game_resets_status_and_is_playable[lost] PASSED [ 57%]
+tests/test_app_gameplay.py::test_difficulty_change_starts_game_in_selected_range[Easy] PASSED [ 64%]
+tests/test_app_gameplay.py::test_difficulty_change_starts_game_in_selected_range[Normal] PASSED [ 71%]
+tests/test_app_gameplay.py::test_difficulty_change_starts_game_in_selected_range[Hard] PASSED [ 78%]
+tests/test_game_logic.py::test_winning_guess PASSED                              [ 85%]
+tests/test_game_logic.py::test_guess_too_high PASSED                             [ 92%]
+tests/test_game_logic.py::test_guess_too_low PASSED                              [100%]
 
-tests/test_app_gameplay.py  11 passed
-tests/test_game_logic.py    3 passed
-
-======================== 14 passed in 0.40s ========================
-
+============================== 14 passed in 0.36s =============================
 ```
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+Not attempted. Focused on fixing the original gameplay bugs, refactoring the code, and verifying the repairs through automated tests.
